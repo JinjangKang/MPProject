@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "315045024293",
+    "project_id": "mpproject-ba19a",
+    "storage_bucket": "mpproject-ba19a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315045024293:android:ba6a08d8c1cd98e43be5cc",
+        "android_client_info": {
+          "package_name": "com.example.pit_a_pet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315045024293-ljpvh0kfobmmv7j6g1l89576nbe7d9rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU70oM7xNv4Cs6_T5whZe_YA7JJ1y3oq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315045024293-ljpvh0kfobmmv7j6g1l89576nbe7d9rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
