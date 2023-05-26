@@ -1,6 +1,7 @@
 package com.example.pit_a_pet
 
 import RVAdapter
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,6 +19,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.values
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,38 +56,103 @@ class PetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val firedb = FirebaseDatabase.getInstance("https://mpproject-ba19a-default-rtdb.asia-southeast1.firebasedatabase.app")
-        val ref = firedb.reference.child("pets")
+
 
         binding = FragmentPetBinding.inflate(inflater, container, false)
-        val rv = binding.petList
 
-        rv.layoutManager = LinearLayoutManager(requireContext())
+        val thread = NetworkThread()
+        thread.start()
+        thread.join()
 
-        val items = mutableListOf<petdata>()
-        val rvAdapter = RVAdapter(items)
-        rv.adapter = rvAdapter
-
-        ref.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                items.clear()
-
-                for (childSnapshot in snapshot.children) {
-                    val petInfo = childSnapshot.getValue(petdata::class.java)
-                    petInfo?.let {
-                        items.add(it)
-                    }
-                }
-                rvAdapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("asd", "failed")
-            }
-        })
+        val recyclerView: RecyclerView = binding.petList
+        val verticalSpaceItemDecoration = VerticalSpaceItemDecoration(20)
+        recyclerView.addItemDecoration(verticalSpaceItemDecoration)
 
         return binding.root
     }
+
+    inner class NetworkThread:Thread(){
+        override fun run(){
+
+            // 키 값
+            val key = "Z2WBxekxGTIDegURqOBPHpoD8m6Dr6ojNR8Ridn6G9kUfku1afB2TOLmRsWB%2BMOukK%2FVCLKhxBnq9pWFSNy5kQ%3D%3D"
+
+            // 현재 페이지번호
+            val pageNo = "&pageNo=1"
+
+            // 한 페이지 결과 수
+            val numOfRows ="&numOfRows=10"
+
+            // AND(안드로이드)
+            val MobileOS = "&MobileOS=AND"
+
+            // 서비스명 = 어플명
+            val MobileApp = "&MobileApp=AppTest"
+
+            val site = "http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?serviceKey=\n" +
+                    "\n"+key+pageNo+numOfRows+MobileOS+MobileApp+"&_type=json"
+
+            val url = URL(site)
+            val conn = url.openConnection()
+            val input = conn.getInputStream()
+            val isr = InputStreamReader(input)
+            // br: 라인 단위로 데이터를 읽어오기 위해서 만듦
+            val br = BufferedReader(isr)
+            // Json 문서는 일단 문자열로 데이터를 모두 읽어온 후, Json에 관련된 객체를 만들어서 데이터를 가져옴
+            var str: String? = null
+            val buf = StringBuffer()
+
+            do{
+                str = br.readLine()
+
+                if(str!=null){
+                    buf.append(str)
+                }
+            }while (str!=null)
+
+            // 전체가 객체로 묶여있기 때문에 객체형태로 가져옴
+            val root = JSONObject(buf.toString())
+            val response = root.getJSONObject("response").getJSONObject("body").getJSONObject("items")
+            val item = response.getJSONArray("item") // 객체 안에 있는 item이라는 이름의 리스트를 가져옴
+
+            val data = mutableListOf<petdata>()
+
+            for(asd in 0..9){
+                val jsonitem = item.getJSONObject(asd)
+                data.add(petdata("${jsonitem.getString("happenDt")}",
+                    "${jsonitem.getString("kindCd")}",
+                    "${jsonitem.getString("happenPlace")}",
+                    "${jsonitem.getString("noticeNo")}",
+                    "${jsonitem.getString("popfile")}"
+                ))
+
+            }
+            val rvAdapter = RVAdapter(data)
+            rvAdapter.notifyDataSetChanged()
+
+            val rv = binding.petList
+            rv.adapter = rvAdapter
+            rv.layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    class VerticalSpaceItemDecoration(private val verticalSpaceHeight: Int):
+        RecyclerView.ItemDecoration(){
+
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            super.getItemOffsets(outRect, view, parent, state)
+
+            outRect.bottom = verticalSpaceHeight
+
+        }
+    }
+
+
 
     companion object {
         /**
