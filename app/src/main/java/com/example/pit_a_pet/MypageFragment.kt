@@ -1,18 +1,15 @@
 package com.example.pit_a_pet
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import com.example.pit_a_pet.databinding.FragmentMypageBinding
-import com.example.pit_a_pet.databinding.FragmentPetBinding
-import org.w3c.dom.Text
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +25,9 @@ class MypageFragment : Fragment() {
 
     private lateinit var binding: FragmentMypageBinding
 
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -41,26 +41,56 @@ class MypageFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
 
 
         binding = FragmentMypageBinding.inflate(inflater,container,false)
         val loginTextview: TextView = binding.loginTV
+        val logoutTextview : TextView = binding.logoutTV
 
-        loginTextview.setOnClickListener{
 
-            val fragmentManager = parentFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.mainFragment, LoginFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+        val fragmentManager = parentFragmentManager
+        val transaction = fragmentManager.beginTransaction()
 
+        // 로그인 상태
+        if(currentUser != null){
+
+            //로그인 텍스트뷰
+            loginTextview.text = currentUser.email
+            loginTextview.isClickable = false
+
+
+            //로그아웃 텍스트뷰
+            logoutTextview.visibility = View.VISIBLE
+            logoutTextview.setOnClickListener{
+                auth.signOut()
+
+                Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+
+                transaction.replace(R.id.mainFragment, LoadingFragment())
+                transaction.commit()
+            }
         }
+        //로그인 하지 않은 상태
+        else{
 
+            //로그인 텍스트 뷰
+            loginTextview.setOnClickListener{
+                transaction.replace(R.id.mainFragment, LoginFragment())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+
+            //로그아웃 텍스트뷰
+            logoutTextview.visibility = View.GONE
+        }
         return binding.root
     }
+
+
+
 
 
 

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="PIT-A-PET = '두근두근'"
+            android:text="PIT-A-PAT = '두근두근'"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25dp"

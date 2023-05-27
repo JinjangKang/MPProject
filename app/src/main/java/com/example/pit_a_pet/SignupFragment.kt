@@ -51,6 +51,9 @@ class SignupFragment : Fragment() {
             val password = binding.password.text.toString()
             val passwordcheck = binding.passwordcheck.text.toString()
 
+            val fragmentManager = parentFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+
             if (password == passwordcheck) {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
@@ -64,8 +67,8 @@ class SignupFragment : Fragment() {
                                     if (signInTask.isSuccessful) {
                                         // 로그인 성공
                                         // 자동 로그인 후 수행할 작업 수행
-                                        activity?.supportFragmentManager?.popBackStack()
-                                        activity?.supportFragmentManager?.popBackStack()
+                                        transaction.replace(R.id.mainFragment, LoadingFragment())
+                                        transaction.commit()
                                     } else {
                                         // 로그인 실패
                                         Toast.makeText(activity, "자동 로그인 실패", Toast.LENGTH_SHORT).show()

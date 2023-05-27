@@ -46,6 +46,9 @@ class LoginFragment : Fragment() {
 
 
         val loginBtn = binding.loginBtn
+        val fragmentManager = parentFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+
         loginBtn.setOnClickListener {
             val email = binding.email.text.toString()
             val password = binding.password.text.toString()
@@ -56,7 +59,9 @@ class LoginFragment : Fragment() {
                         // 로그인 성공
                         val user = auth.currentUser
                         // 추가적인 작업 수행
-                        activity?.supportFragmentManager?.popBackStack()
+//                        activity?.supportFragmentManager?.popBackStack()
+                        transaction.replace(R.id.mainFragment, LoadingFragment())
+                        transaction.commit()
 
                     } else {
                         // 로그인 실패
@@ -72,6 +77,7 @@ class LoginFragment : Fragment() {
             transaction.replace(R.id.mainFragment, SignupFragment())
             transaction.addToBackStack(null)
             transaction.commit()
+            fragmentmanger.findFragmentByTag("MypageFragment")?.onResume()
 
         }
 
