@@ -16,12 +16,12 @@
         app:srcCompat="@android:drawable/btn_dialog" />
 
     <TextView
-        android:id="@+id/pettext1"
+        android:id="@+id/startday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="18dp"
-        android:text="공고기간"
+        android:text="20000000"
         app:layout_constraintStart_toEndOf="@+id/petimage1"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
         android:layout_marginStart="15dp"
         android:text="품종"
         app:layout_constraintStart_toEndOf="@+id/petimage1"
-        app:layout_constraintTop_toBottomOf="@+id/pettext1" />
+        app:layout_constraintTop_toBottomOf="@+id/startday" />
 
     <TextView
         android:id="@+id/pettext3"
@@ -51,5 +51,25 @@
         android:text="구조장소"
         app:layout_constraintStart_toEndOf="@+id/petimage1"
         app:layout_constraintTop_toBottomOf="@+id/pettext3" />
+
+    <TextView
+        android:id="@+id/endday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="18dp"
+        android:text="20000000"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="18dp"
+        android:text="~"
+        app:layout_constraintStart_toEndOf="@+id/startday"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

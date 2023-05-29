@@ -44,7 +44,7 @@ class LoadingFragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-        timer.postDelayed(runnable, 1000)
+        timer.postDelayed(runnable, 500)
 
         return inflater.inflate(R.layout.fragment_loading, container, false)
     }
