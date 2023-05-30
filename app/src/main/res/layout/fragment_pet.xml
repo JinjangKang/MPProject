@@ -12,6 +12,17 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#DFD3CB"
+            android:gravity="center"
+            android:text="PIT-A-PET"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/filterTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,17 +31,17 @@
             android:text="필터 설정"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/petList"
             android:layout_width="322dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="44dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="52dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/textView10">
 
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>

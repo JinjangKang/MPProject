@@ -1,5 +1,7 @@
 package com.example.pit_a_pet
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -97,6 +99,15 @@ class MypageFragment : Fragment() {
             //찜리스트
             zzimList.visibility = View.GONE
         }
+
+        val imagelink = binding.imageView
+        imagelink.setOnClickListener{
+            val url = "https://www.youtube.com/watch?v=2xTztH8ljMo"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 

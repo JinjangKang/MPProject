@@ -24,7 +24,7 @@
 
         <ImageView
             android:id="@+id/imageDetail"
-            android:layout_width="411dp"
+            android:layout_width="393dp"
             android:layout_height="300dp"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintStart_toStartOf="parent"
