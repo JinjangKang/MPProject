@@ -1,5 +1,6 @@
 package com.example.pit_a_pet
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -79,33 +80,53 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.imageDetail)
 
-        binding.zzimbutton.setOnClickListener {
-            val zzimRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
+        val zzimRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
+        zzimRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // 이미 데이터베이스에 존재하는 경우
+                    binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
+                    binding.zzimbutton.text = "삭제하기"
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // 에러 처리 로직 추가
+            }
+        })
 
-            zzimRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        binding.zzimbutton.setOnClickListener {
+            val userRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        // 이미 찜 목록에 있는 경우
-                        Toast.makeText(requireContext(), "이미 찜 목록에 있습니다.", Toast.LENGTH_SHORT).show()
+                        // 이미 찜 목록에 존재하는 경우, 데이터 삭제
+                        userRef.removeValue()
+                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#6200ee"))
+                        binding.zzimbutton.text = "찜하기"
+                        Toast.makeText(requireContext(), "찜 목록에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     } else {
-                        // 찜 목록에 추가
-                        zzimRef.child("type").setValue(item.type)
-                        zzimRef.child("gender").setValue(item.gender)
-                        zzimRef.child("color").setValue(item.color)
-                        zzimRef.child("birth").setValue(item.birth)
-                        zzimRef.child("weight").setValue(item.weight)
-                        zzimRef.child("CODE").setValue(item.CODE)
-                        zzimRef.child("postperiod").setValue(item.postperiod)
-                        zzimRef.child("postperiod2").setValue(item.postperiod2)
-                        zzimRef.child("rescueplace").setValue(item.rescueplace)
-                        zzimRef.child("detail").setValue(item.detail)
-                        zzimRef.child("center").setValue(item.center)
-                        zzimRef.child("buseo").setValue(item.buseo)
-                        zzimRef.child("region").setValue(item.region)
-                        zzimRef.child("img").setValue(item.img)
-                        zzimRef.child("date").setValue(item.date)
-
-                        Toast.makeText(requireContext(), "찜 목록에 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                        // 찜 목록에 존재하지 않는 경우, 데이터 추가
+                        val petData = mapOf(
+                            "type" to item.type,
+                            "gender" to item.gender,
+                            "color" to item.color,
+                            "birth" to item.birth,
+                            "weight" to item.weight,
+                            "CODE" to item.CODE,
+                            "postperiod" to item.postperiod,
+                            "postperiod2" to item.postperiod2,
+                            "rescueplace" to item.rescueplace,
+                            "detail" to item.detail,
+                            "center" to item.center,
+                            "buseo" to item.buseo,
+                            "region" to item.region,
+                            "img" to item.img,
+                            "date" to item.date
+                        )
+                        userRef.setValue(petData)
+                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
+                        binding.zzimbutton.text = "삭제하기"
+                        Toast.makeText(requireContext(), "찜 목록에 추가되었습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -114,6 +135,8 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
                 }
             })
         }
+
+
 
 
         return binding.root
