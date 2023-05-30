@@ -49,6 +49,7 @@ class MypageFragment : Fragment() {
         binding = FragmentMypageBinding.inflate(inflater,container,false)
         val loginTextview: TextView = binding.loginTV
         val logoutTextview : TextView = binding.logoutTV
+        val zzimList: TextView = binding.zzimList
 
 
         val fragmentManager = parentFragmentManager
@@ -72,6 +73,14 @@ class MypageFragment : Fragment() {
                 transaction.replace(R.id.mainFragment, LoadingFragment())
                 transaction.commit()
             }
+
+            //찜리스트
+            zzimList.visibility = View.VISIBLE
+            zzimList.setOnClickListener{
+                transaction.replace(R.id.mainFragment, ZzimListFragment())
+                transaction.commit()
+            }
+
         }
         //로그인 하지 않은 상태
         else{
@@ -85,6 +94,8 @@ class MypageFragment : Fragment() {
 
             //로그아웃 텍스트뷰
             logoutTextview.visibility = View.GONE
+            //찜리스트
+            zzimList.visibility = View.GONE
         }
         return binding.root
     }

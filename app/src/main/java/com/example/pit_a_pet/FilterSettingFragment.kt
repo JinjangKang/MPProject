@@ -22,10 +22,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 
-interface FilterListener {
-    fun onFilterApplied(filterData: FilterData)
-}
-
 class FilterSettingFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null

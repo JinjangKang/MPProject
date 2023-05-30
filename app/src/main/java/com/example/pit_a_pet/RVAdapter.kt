@@ -9,9 +9,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.pit_a_pet.R
-import com.example.pit_a_pet.petdata
+import com.example.pit_a_pet.Petdata
 
-class RVAdapter(private var dataList: List<petdata>) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
+class RVAdapter(private var dataList: List<Petdata>, private val listener: OnItemClickListener) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,7 +20,7 @@ class RVAdapter(private var dataList: List<petdata>) : RecyclerView.Adapter<RVAd
 
     }
 
-    fun setData(newDataList: List<petdata>) {
+    fun setData(newDataList: List<Petdata>) {
         dataList = newDataList
     }
 
@@ -35,19 +35,26 @@ class RVAdapter(private var dataList: List<petdata>) : RecyclerView.Adapter<RVAd
 
 
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         private val pettext1: TextView = itemView.findViewById(R.id.startday)
         private val pettext2: TextView = itemView.findViewById(R.id.pettext2)
         private val pettext3: TextView = itemView.findViewById(R.id.pettext3)
         private val pettext4: TextView = itemView.findViewById(R.id.pettext4)
+        private val pettext5: TextView = itemView.findViewById(R.id.endday)
         private val petimage: ImageView = itemView.findViewById(R.id.petimage1)
 
 
-        fun bind(item: petdata) {
+        fun bind(item: Petdata) {
             pettext1.text = item.postperiod
             pettext2.text = item.type
             pettext3.text = item.region
             pettext4.text = item.rescueplace
+            pettext5.text = item.postperiod2
             Glide.with(itemView.context)
                 .load(item.img)
                 .placeholder(R.drawable.ic_launcher_foreground)
@@ -58,11 +65,18 @@ class RVAdapter(private var dataList: List<petdata>) : RecyclerView.Adapter<RVAd
                 .encodeQuality(70)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(petimage)
+        }
 
+        override fun onClick(view: View) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val clickedItem = dataList[position]
+                listener.onItemClicked(clickedItem)
+            }
         }
     }
 
-
-
-
+    interface OnItemClickListener {
+        fun onItemClicked(item: Petdata)
+    }
 }

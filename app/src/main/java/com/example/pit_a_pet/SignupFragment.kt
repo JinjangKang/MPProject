@@ -10,6 +10,9 @@ import com.example.pit_a_pet.databinding.FragmentSignupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,7 +31,7 @@ class SignupFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private var rdb = FirebaseDatabase.getInstance("https://mpproject-ba19a-default-rtdb.asia-southeast1.firebasedatabase.app/").reference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -60,6 +63,7 @@ class SignupFragment : Fragment() {
                         if (task.isSuccessful) {
                             // 회원 가입 성공
                             val user = auth.currentUser
+                            rdb.child("USER").child(user!!.uid).setValue(email)
                             Toast.makeText(activity, "회원가입이 완료되었습니다. 자동으로 로그인 합니다.", Toast.LENGTH_LONG).show()
 
                             auth.signInWithEmailAndPassword(email, password)

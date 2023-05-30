@@ -31,11 +31,11 @@ import java.net.URL
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-private val data = mutableListOf<petdata>()
+private val data = mutableListOf<Petdata>()
 
 private lateinit var binding: FragmentPetBinding
 
-class PetFragment : Fragment(), FilterListener{
+class PetFragment : Fragment(), FilterListener,  RVAdapter.OnItemClickListener{
 
 
     private var param1: String? = null
@@ -66,7 +66,7 @@ class PetFragment : Fragment(), FilterListener{
         val verticalSpaceItemDecoration = VerticalSpaceItemDecoration(20)
         recyclerView.addItemDecoration(verticalSpaceItemDecoration)
 
-        rvAdapter = RVAdapter(data)
+        rvAdapter = RVAdapter(data, this)
 
         val rv = binding.petList
         rv.adapter = rvAdapter
@@ -85,10 +85,31 @@ class PetFragment : Fragment(), FilterListener{
             transaction.replace(R.id.mainFragment, filterSettingFragment)
             transaction.addToBackStack(null)
             transaction.commit()
-
         }
 
+
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        val rv = binding.petList
+        rv.adapter = rvAdapter
+        rv.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun onItemClicked(item: Petdata) {
+
+        val fragment = PetDetailFragment()
+        (fragment as? OnItemClickListener)?.onItemClick(item)
+        val fragmentManager = parentFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.mainFragment, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun onFilterApplied(filterData: FilterData) {
@@ -195,12 +216,22 @@ class PetFragment : Fragment(), FilterListener{
             for (asd in 0 until itemlen) {
                 val jsonitem = item.getJSONObject(asd)
                 data.add(
-                    petdata(
-                        "${jsonitem.getString("happenDt")}",
+                    Petdata(
+                        "${jsonitem.getString("noticeSdt")}",
+                        "${jsonitem.getString("noticeEdt")}",
+                        "${jsonitem.getString("kindCd")}",
                         "${jsonitem.getString("orgNm")}",
                         "${jsonitem.getString("happenPlace")}",
+                        "${jsonitem.getString("popfile")}",
                         "${jsonitem.getString("noticeNo")}",
-                        "${jsonitem.getString("popfile")}"
+                        "${jsonitem.getString("sexCd")}",
+                        "${jsonitem.getString("colorCd")}",
+                        "${jsonitem.getString("age")}",
+                        "${jsonitem.getString("weight")}",
+                        "${jsonitem.getString("noticeNo")}",
+                        "${jsonitem.getString("specialMark")}",
+                        "${jsonitem.getString("careNm")}",
+                        "${jsonitem.getString("noticeNo")}",
                     )
                 )
             }
