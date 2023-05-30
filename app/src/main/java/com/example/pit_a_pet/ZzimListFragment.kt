@@ -103,6 +103,50 @@ class ZzimListFragment : Fragment() , RVAdapter.OnItemClickListener{
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchData()
+    }
+
+    private fun fetchData(){
+        val newData = mutableListOf<Petdata>()
+        val userRef = rdb.child("USER").child(auth.currentUser!!.uid)
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+
+                for (childSnapshot in dataSnapshot.children) {
+                    newData.add(
+                        Petdata(
+                            "${childSnapshot.child("postperiod").value}",
+                            "${childSnapshot.child("postperiod2").value}",
+                            "${childSnapshot.child("type").value}",
+                            "${childSnapshot.child("region").value}",
+                            "${childSnapshot.child("rescueplace").value}",
+                            "${childSnapshot.child("img").value}",
+                            "${childSnapshot.child("CODE").value}",
+                            "${childSnapshot.child("gender").value}",
+                            "${childSnapshot.child("color").value}",
+                            "${childSnapshot.child("birth").value}",
+                            "${childSnapshot.child("weight").value}",
+                            "${childSnapshot.child("date").value}",
+                            "${childSnapshot.child("detail").value}",
+                            "${childSnapshot.child("center").value}",
+                            "${childSnapshot.child("buseo").value}",
+                        )
+                    )
+                }
+                data.clear()
+                data.addAll(newData)
+                rvAdapter.notifyDataSetChanged() // 어댑터에 데이터 변경 알림
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // 데이터 읽기가 취소되었을 때 실행되는 콜백 메서드
+            }
+        })
+        rvAdapter.notifyDataSetChanged()
+    }
+
     override fun onItemClicked(item: Petdata) {
 
         val fragment = PetDetailFragment()
