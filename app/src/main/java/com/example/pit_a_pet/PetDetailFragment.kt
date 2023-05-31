@@ -80,6 +80,7 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.imageDetail)
 
+
         val zzimRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
         zzimRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
