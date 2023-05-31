@@ -1,6 +1,7 @@
 package com.example.pit_a_pet
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,12 @@ import com.example.pit_a_pet.databinding.FragmentInfoBinding
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
-private lateinit var binding: FragmentInfoBinding
-
+private val song: Song = Song("", "")
 class InfoFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var binding: FragmentInfoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +32,12 @@ class InfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInfoBinding.inflate(inflater,container,false)
-
-
-
+        val songDB = SongDatabase.getInstance(requireContext())!!
+        Log.d("dbdb", songDB.songDao().getSongs().toString())
 
         return binding.root
     }
+
 
 
     companion object {
