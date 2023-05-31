@@ -45,6 +45,13 @@ class MainActivity : AppCompatActivity() {
                         .replace(R.id.mainFragment, fragment)
                         .commit()
                 }
+                R.id.navigation_map -> {
+                    // 페이지 3의 프래그먼트를 열기
+                    val fragment = MapFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainFragment, fragment)
+                        .commit()
+                }
                 R.id.navigation_information -> {
                     // 페이지 3의 프래그먼트를 열기
                     val fragment = InfoFragment()
