@@ -5,10 +5,18 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface SongDao {
+interface MealManagementDao {
     @Insert
-    fun insert(song: Song)
+    fun insert(mealManagement: MealManagement)
 
-    @Query("SELECT * FROM SongTable") // 테이블의 모든 값을 가져와라
-    fun getSongs(): List<Song>
+    @Query("SELECT * FROM MealManagementTable") // 테이블의 모든 값을 가져와라
+    fun getMealManagement(): List<MealManagement>
+}
+@Dao
+interface DangerFoodDao {
+    @Insert
+    fun insert(dangerFood: DangerFood)
+
+    @Query("SELECT * FROM DangerFoodTable") // 테이블의 모든 값을 가져와라
+    fun getDangerFood(): List<DangerFood>
 }

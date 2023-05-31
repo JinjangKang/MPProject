@@ -12,7 +12,6 @@ import com.example.pit_a_pet.databinding.FragmentInfoBinding
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private val song: Song = Song("", "")
 class InfoFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
@@ -32,8 +31,13 @@ class InfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInfoBinding.inflate(inflater,container,false)
-        val songDB = SongDatabase.getInstance(requireContext())!!
-        Log.d("dbdb", songDB.songDao().getSongs().toString())
+        val petKnowledgeDB = PetKnowledgeDatabase.getInstance(requireContext())!!
+
+        // 식사관리
+         Log.d("dbdb", petKnowledgeDB.mealManagementDao().getMealManagement().toString())
+
+        // 반려견이 먹으면 안되는 음식
+         Log.d("dbdb", petKnowledgeDB.dangerFoodDao().getDangerFood().toString())
 
         return binding.root
     }
