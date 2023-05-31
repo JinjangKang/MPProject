@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pit_a_pet.databinding.FragmentMypageBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.shashank.sony.fancytoastlib.FancyToast
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -72,7 +73,7 @@ class MypageFragment : Fragment() {
             logoutTextview.setOnClickListener{
                 auth.signOut()
 
-                Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                FancyToast.makeText(requireContext(), "로그아웃 되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show()
 
                 transaction.replace(R.id.mainFragment, LoadingFragment())
                 transaction.commit()
