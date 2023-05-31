@@ -3,26 +3,21 @@
     <item
         android:id="@+id/navigation_home"
         android:enabled="true"
-        android:icon="@drawable/home"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="홈" />
 
     <item
         android:id="@+id/navigation_pet"
-        android:icon="@drawable/pawprint"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="유기동물" />
 
     <item
-        android:id="@+id/navigation_map"
-        android:icon="@drawable/placeholder"
-        android:title="동물병원" />
-
-    <item
         android:id="@+id/navigation_information"
-        android:icon="@drawable/info"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="관련정보" />
 
     <item
         android:id="@+id/navigation_mypage"
-        android:icon="@drawable/user"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="마이페이지" />
 </menu>

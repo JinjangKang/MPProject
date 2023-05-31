@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.shashank.sony.fancytoastlib.FancyToast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,64 +50,57 @@ class SignupFragment : Fragment() {
         val registerBtn = binding.registerBtn
 
         registerBtn.setOnClickListener {
+            val email = binding.email.text.toString()
+            val password = binding.password.text.toString()
+            val passwordcheck = binding.passwordcheck.text.toString()
 
-            if(binding.email.text.toString().isEmpty() || binding.password.text.toString().isEmpty() || binding.passwordcheck.text.toString().isEmpty()){
-                FancyToast.makeText(requireContext(),"아이디와 비밀번호를 입력하세요.",FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
-            }
+            val fragmentManager = parentFragmentManager
+            val transaction = fragmentManager.beginTransaction()
 
-            else{
-                val email = binding.email.text.toString()
-                val password = binding.password.text.toString()
-                val passwordcheck = binding.passwordcheck.text.toString()
+            if (password == passwordcheck) {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // 회원 가입 성공
+                            val user = auth.currentUser
+                            rdb.child("USER").child(user!!.uid).setValue(email)
+                            Toast.makeText(activity, "회원가입이 완료되었습니다. 자동으로 로그인 합니다.", Toast.LENGTH_LONG).show()
 
-                val fragmentManager = parentFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-
-                if (password == passwordcheck) {
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                // 회원 가입 성공
-                                val user = auth.currentUser
-                                rdb.child("USER").child(user!!.uid).setValue(email)
-
-                                FancyToast.makeText(requireContext(),"회원가입이 완료되었습니다. 자동으로 로그인 합니다.",FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show()
-
-                                auth.signInWithEmailAndPassword(email, password)
-                                    .addOnCompleteListener { signInTask ->
-                                        if (signInTask.isSuccessful) {
-                                            // 로그인 성공
-                                            // 자동 로그인 후 수행할 작업 수행
-                                            transaction.replace(R.id.mainFragment, LoadingFragment())
-                                            transaction.commit()
-                                        } else {
-                                            // 로그인 실패
-                                            Toast.makeText(activity, "자동 로그인 실패", Toast.LENGTH_SHORT).show()
-                                        }
+                            auth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { signInTask ->
+                                    if (signInTask.isSuccessful) {
+                                        // 로그인 성공
+                                        // 자동 로그인 후 수행할 작업 수행
+                                        transaction.replace(R.id.mainFragment, LoadingFragment())
+                                        transaction.commit()
+                                    } else {
+                                        // 로그인 실패
+                                        Toast.makeText(activity, "자동 로그인 실패", Toast.LENGTH_SHORT).show()
                                     }
-                                // 추가 작업 수행
-                            } else {
-                                // 회원 가입 실패
-                                try {
-                                    throw task.exception!!
-                                } catch (e: FirebaseAuthUserCollisionException) {
-                                    FancyToast.makeText(requireContext(),"이메일이 중복되었습니다.",FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
-
-                                } catch (e: FirebaseAuthWeakPasswordException){
-                                    FancyToast.makeText(requireContext(),"비밀번호는 최소 6자리 이상이어야 합니다.",FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
-
                                 }
-                                catch (e: Exception) {
-                                    // 기타 예외 처리
-                                    FancyToast.makeText(requireContext(),"회원 가입 실패",FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
-                                }
+                            // 추가 작업 수행
+                        } else {
+                            // 회원 가입 실패
+                            try {
+                                throw task.exception!!
+                            } catch (e: FirebaseAuthUserCollisionException) {
+                                Toast.makeText(activity, "이메일이 중복되었습니다.", Toast.LENGTH_SHORT).show()
+                            } catch (e: FirebaseAuthWeakPasswordException){
+                                Toast.makeText(activity, "비밀번호는 최소 6자리 이상이어야 합니다.", Toast.LENGTH_SHORT).show()
+
+                            }
+                            catch (e: Exception) {
+                                // 기타 예외 처리
+                                Toast.makeText(activity, "회원 가입 실패", Toast.LENGTH_SHORT).show()
                             }
                         }
-                } else {
-                    FancyToast.makeText(requireContext(),"비밀번호가 일치하지 않습니다.",FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
-                }
+                    }
+            } else {
+                Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+
+
         return binding.root
     }
 

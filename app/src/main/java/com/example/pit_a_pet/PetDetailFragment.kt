@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.shashank.sony.fancytoastlib.FancyToast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -81,7 +80,6 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.imageDetail)
 
-
         val zzimRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
         zzimRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -105,7 +103,7 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
                         userRef.removeValue()
                         binding.zzimbutton.setBackgroundColor(Color.parseColor("#6200ee"))
                         binding.zzimbutton.text = "찜하기"
-                        FancyToast.makeText(requireContext(), "찜 목록에서 삭제되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
+                        Toast.makeText(requireContext(), "찜 목록에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     } else {
                         // 찜 목록에 존재하지 않는 경우, 데이터 추가
                         val petData = mapOf(
@@ -128,8 +126,7 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
                         userRef.setValue(petData)
                         binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
                         binding.zzimbutton.text = "삭제하기"
-                        FancyToast.makeText(requireContext(), "찜 목록에 추가되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show()
-
+                        Toast.makeText(requireContext(), "찜 목록에 추가되었습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
 

@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.lottie.Lottie
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +44,7 @@ class LoadingFragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-        timer.postDelayed(runnable, 2000)
+        timer.postDelayed(runnable, 500)
 
         return inflater.inflate(R.layout.fragment_loading, container, false)
     }

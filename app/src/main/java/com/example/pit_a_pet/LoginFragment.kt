@@ -1,7 +1,6 @@
 package com.example.pit_a_pet
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import com.example.pit_a_pet.databinding.FragmentLoginBinding
 import com.example.pit_a_pet.databinding.FragmentSignupBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.shashank.sony.fancytoastlib.FancyToast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,41 +50,24 @@ class LoginFragment : Fragment() {
         val transaction = fragmentManager.beginTransaction()
 
         loginBtn.setOnClickListener {
-            if(binding.email.text.toString().isEmpty() || binding.password.text.toString().isEmpty()){
-               FancyToast.makeText(requireContext(),"아이디와 비밀번호를 입력하세요.",FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
-            }else{
-                val email = binding.email.text.toString()
-                val password = binding.password.text.toString()
+            val email = binding.email.text.toString()
+            val password = binding.password.text.toString()
 
-                auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // 로그인 성공
-                            val user = auth.currentUser
-                            // 추가적인 작업 수행
-                            transaction.replace(R.id.mainFragment, LoadingFragment())
-                            transaction.commit()
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener{task ->
+                    if (task.isSuccessful) {
+                        // 로그인 성공
+                        val user = auth.currentUser
+                        // 추가적인 작업 수행
+//                        activity?.supportFragmentManager?.popBackStack()
+                        transaction.replace(R.id.mainFragment, LoadingFragment())
+                        transaction.commit()
 
-                            FancyToast.makeText(
-                                requireContext(),
-                                "로그인에 성공하였습니다.",
-                                FancyToast.LENGTH_SHORT,
-                                FancyToast.SUCCESS,
-                                false
-                            ).show()
-
-                        } else {
-                            // 로그인 실패
-                            FancyToast.makeText(
-                                requireContext(),
-                                "로그인에 실패하였습니다.",
-                                FancyToast.LENGTH_SHORT,
-                                FancyToast.ERROR,
-                                false
-                            ).show()
-                        }
+                    } else {
+                        // 로그인 실패
+                        Toast.makeText(requireContext(), "로그인 실패", Toast.LENGTH_SHORT).show()
                     }
-            }
+                }
         }
 
         val singup = binding.signup
