@@ -82,62 +82,70 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
             .into(binding.imageDetail)
 
 
-        val zzimRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
-        zzimRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // 이미 데이터베이스에 존재하는 경우
-                    binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
-                    binding.zzimbutton.text = "삭제하기"
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // 에러 처리 로직 추가
-            }
-        })
-
-        binding.zzimbutton.setOnClickListener {
-            val userRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
-            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        if(auth.currentUser != null){
+            val zzimRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
+            zzimRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        // 이미 찜 목록에 존재하는 경우, 데이터 삭제
-                        userRef.removeValue()
-                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#6200ee"))
-                        binding.zzimbutton.text = "찜하기"
-                        FancyToast.makeText(requireContext(), "찜 목록에서 삭제되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
-                    } else {
-                        // 찜 목록에 존재하지 않는 경우, 데이터 추가
-                        val petData = mapOf(
-                            "type" to item.type,
-                            "gender" to item.gender,
-                            "color" to item.color,
-                            "birth" to item.birth,
-                            "weight" to item.weight,
-                            "CODE" to item.CODE,
-                            "postperiod" to item.postperiod,
-                            "postperiod2" to item.postperiod2,
-                            "rescueplace" to item.rescueplace,
-                            "detail" to item.detail,
-                            "center" to item.center,
-                            "buseo" to item.buseo,
-                            "region" to item.region,
-                            "img" to item.img,
-                            "date" to item.date
-                        )
-                        userRef.setValue(petData)
+                        // 이미 데이터베이스에 존재하는 경우
                         binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
                         binding.zzimbutton.text = "삭제하기"
-                        FancyToast.makeText(requireContext(), "찜 목록에 추가되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show()
-
                     }
                 }
-
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // 데이터 읽기가 취소되었을 때 실행되는 콜백 메서드
+                    // 에러 처리 로직 추가
                 }
             })
+
+            binding.zzimbutton.setOnClickListener {
+                val userRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
+                userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            // 이미 찜 목록에 존재하는 경우, 데이터 삭제
+                            userRef.removeValue()
+                            binding.zzimbutton.setBackgroundColor(Color.parseColor("#6200ee"))
+                            binding.zzimbutton.text = "찜하기"
+                            FancyToast.makeText(requireContext(), "찜 목록에서 삭제되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
+                        } else {
+                            // 찜 목록에 존재하지 않는 경우, 데이터 추가
+                            val petData = mapOf(
+                                "type" to item.type,
+                                "gender" to item.gender,
+                                "color" to item.color,
+                                "birth" to item.birth,
+                                "weight" to item.weight,
+                                "CODE" to item.CODE,
+                                "postperiod" to item.postperiod,
+                                "postperiod2" to item.postperiod2,
+                                "rescueplace" to item.rescueplace,
+                                "detail" to item.detail,
+                                "center" to item.center,
+                                "buseo" to item.buseo,
+                                "region" to item.region,
+                                "img" to item.img,
+                                "date" to item.date
+                            )
+                            userRef.setValue(petData)
+                            binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
+                            binding.zzimbutton.text = "삭제하기"
+                            FancyToast.makeText(requireContext(), "찜 목록에 추가되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show()
+
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        // 데이터 읽기가 취소되었을 때 실행되는 콜백 메서드
+                    }
+                })
+            }
+        } else{
+            binding.zzimbutton.setOnClickListener{
+                FancyToast.makeText(requireContext(),"로그인이 필요합니다.",FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show()
+            }
         }
+
+
 
 
 
