@@ -130,6 +130,39 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
                             binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
                             binding.zzimbutton.text = "삭제하기"
                             FancyToast.makeText(requireContext(), "찜 목록에 추가되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show()
+        binding.zzimbutton.setOnClickListener {
+            val userRef = rdb.child("USER").child(auth.currentUser!!.uid).child(item.CODE)
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // 이미 찜 목록에 존재하는 경우, 데이터 삭제
+                        userRef.removeValue()
+                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#E0708B"))
+                        binding.zzimbutton.text = "찜하기"
+                        FancyToast.makeText(requireContext(), "찜 목록에서 삭제되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
+                    } else {
+                        // 찜 목록에 존재하지 않는 경우, 데이터 추가
+                        val petData = mapOf(
+                            "type" to item.type,
+                            "gender" to item.gender,
+                            "color" to item.color,
+                            "birth" to item.birth,
+                            "weight" to item.weight,
+                            "CODE" to item.CODE,
+                            "postperiod" to item.postperiod,
+                            "postperiod2" to item.postperiod2,
+                            "rescueplace" to item.rescueplace,
+                            "detail" to item.detail,
+                            "center" to item.center,
+                            "buseo" to item.buseo,
+                            "region" to item.region,
+                            "img" to item.img,
+                            "date" to item.date
+                        )
+                        userRef.setValue(petData)
+                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#9D767F"))
+                        binding.zzimbutton.text = "찜 해제하기"
+                        FancyToast.makeText(requireContext(), "찜 목록에 추가되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show()
 
                         }
                     }
