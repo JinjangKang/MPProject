@@ -12,6 +12,11 @@
         android:title="유기동물" />
 
     <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/placeholder"
+        android:title="동물병원" />
+
+    <item
         android:id="@+id/navigation_information"
         android:icon="@drawable/info"
         android:title="관련정보" />
