@@ -103,7 +103,7 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
                     if (dataSnapshot.exists()) {
                         // 이미 찜 목록에 존재하는 경우, 데이터 삭제
                         userRef.removeValue()
-                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#6200ee"))
+                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#E0708B"))
                         binding.zzimbutton.text = "찜하기"
                         FancyToast.makeText(requireContext(), "찜 목록에서 삭제되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show()
                     } else {
@@ -126,8 +126,8 @@ class PetDetailFragment() : Fragment(), OnItemClickListener  {
                             "date" to item.date
                         )
                         userRef.setValue(petData)
-                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#FF0000"))
-                        binding.zzimbutton.text = "삭제하기"
+                        binding.zzimbutton.setBackgroundColor(Color.parseColor("#9D767F"))
+                        binding.zzimbutton.text = "찜 해제하기"
                         FancyToast.makeText(requireContext(), "찜 목록에 추가되었습니다.", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show()
 
                     }
