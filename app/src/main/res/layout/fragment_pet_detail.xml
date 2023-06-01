@@ -16,8 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="#DFD3CB"
+            android:fontFamily="@font/im"
             android:gravity="center"
             android:text="PIT-A-PET"
+            android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -142,8 +144,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="#E0708B"
             android:text="찜하기"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
